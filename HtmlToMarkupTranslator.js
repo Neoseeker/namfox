@@ -318,12 +318,14 @@ var HtmlToMarkupTranslator = {
         return newHtml;
     },
     
-    translate: function(html) {
+    translate: function(html, callback) {
         /// <summary>
         /// Translates an HTML string directly from Neoseeker into its
         /// appropriate nTag representation.
         /// </summary>
         /// <param name="html" type="String">The HTML to translate.</param>
+        /// <param name="callback" type="Function">The callback function to invoke
+        /// once the markup has been translated.</param>
         
         // Strip any "under moderation" tags (since the person
         // who sees these will be a moderator).
@@ -689,7 +691,13 @@ var HtmlToMarkupTranslator = {
         // Replaces the html entities
         postHtml = this._replaceHtmlEntities(postHtml);
         
-        return HtmlToMarkupTranslator.Util.trim(postHtml);
+        postHtml = HtmlToMarkupTranslator.Util.trim(postHtml);
+        
+        if (callback) {
+            callback(postHtml);
+        }
+        
+        return postHtml;
     },
 };
 
