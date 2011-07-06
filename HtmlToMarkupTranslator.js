@@ -318,21 +318,16 @@ var HtmlToMarkupTranslator = {
         return newHtml;
     },
     
-    translate: function(html, callback) {
+    translate: function(html) {
         /// <summary>
         /// Translates an HTML string directly from Neoseeker into its
         /// appropriate nTag representation.
         /// </summary>
         /// <param name="html" type="String">The HTML to translate.</param>
-        /// <param name="callback" type="Function">The callback function to invoke
-        /// once the markup has been translated.</param>
         
         // Strip any "under moderation" tags (since the person
         // who sees these will be a moderator).
         html = html.replace(/<p> \[ Check <a href=".*?\/index.php\?fn=moderation_queue\&amp;f=\d+">moderation queue<\/a> to see who reported this post \] (?:<\/p>)?\s*$/, "");
-
-        // Strip any edit tags from the end of the post.
-        html = html.replace(/<div[^>]*?class="small right"[^>]*?>[^<]*?Edit[^<]*?<\/div><br \/><\/div>$/, "");
         
         var postHtml = html.replace(/<p> \[ This message has been moved to the <a href=".*?\/index.php\?fn=moderation_queue\&amp;f=\d+">moderation queue<\/a> and is being shown to you due to your moderator status \] <\/p>\s*$/, "");
 
@@ -574,7 +569,15 @@ var HtmlToMarkupTranslator = {
         postHtml = postHtml.replace(/<([ou])l>/g, "[$1l]");
         postHtml = postHtml.replace(/<\/([ou])l>/g, "[/$1l]");
 
-        // Handles case 23 - Adblock Plus adds extra data to block youtube videos, so parse it out.
+        // Handles case 23a - New yt translation
+        replaceExpr = /<!-- yt --><iframe[^>]*?src="https:\/\/www.youtube.com\/embed\/(.*?)\?wmode=transparent".*?><\/iframe><!-- \/yt -->/g;
+        postHtml = postHtml.replace(replaceExpr, "[yt]$1[/yt]");
+
+        // Handles case 23b - New youtube translation
+        replaceExpr = /<iframe[^>]*?src="https:\/\/www.youtube.com\/embed\/(.*?)\?wmode=transparent".*?><\/iframe>/g;
+        postHtml = postHtml.replace(replaceExpr, "[youtube]$1[/youtube]");
+
+        // Handles case 23c - Legacy youtube translation
         replaceExpr = /<object.*?>.*?value="http:\/\/www.youtube.com\/v\/(.*?)">.*?<\/object>/g;
         postHtml = postHtml.replace(replaceExpr, "[youtube]$1[/youtube]");
 
@@ -691,14 +694,8 @@ var HtmlToMarkupTranslator = {
         // Replaces the html entities
         postHtml = this._replaceHtmlEntities(postHtml);
         
-        postHtml = HtmlToMarkupTranslator.Util.trim(postHtml);
-        
-        if (callback) {
-            callback(postHtml);
-        }
-        
-        return postHtml;
-    },
+        return HtmlToMarkupTranslator.Util.trim(postHtml);
+    }
 };
 
 HtmlToMarkupTranslator.Util = {
