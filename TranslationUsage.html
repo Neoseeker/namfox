@@ -5,7 +5,11 @@
     <script src="HtmlToMarkupTranslator.js" type="text/javascript"></script>
     <script>
         function translate() {
-            document.getElementById('markup').value = HtmlToMarkupTranslator.translate(document.getElementById('html').value);
+            HtmlToMarkupTranslator.translate(
+                document.getElementById('html').value,
+                function(markup) {
+                    document.getElementById('markup').value = markup;
+                });
         }
     </script>
     <style>
