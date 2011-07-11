@@ -331,6 +331,9 @@ var HtmlToMarkupTranslator = {
         // who sees these will be a moderator).
         html = html.replace(/<p> \[ Check <a href=".*?\/index.php\?fn=moderation_queue\&amp;f=\d+">moderation queue<\/a> to see who reported this post \] (?:<\/p>)?\s*$/, "");
         
+        // Strip any edit tags from the end of the post.
+        html = html.replace(/<div[^>]*?class="small right"[^>]*?>[^<]*?Edit[^<]*?<\/div><br \/><\/div>$/, "");
+
         var postHtml = html.replace(/<p> \[ This message has been moved to the <a href=".*?\/index.php\?fn=moderation_queue\&amp;f=\d+">moderation queue<\/a> and is being shown to you due to your moderator status \] <\/p>\s*$/, "");
 
         // Used to replace lone <p> tags at the beginning of a post. When
