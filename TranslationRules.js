@@ -66,6 +66,26 @@ NAMFox.translationRules = [
         replacement: "[php]\n$1\n[/php]"
     },
     {
+        name: "Colorized code tag",
+        regexp: /<!-- code (\d+) --><div class="codesnippet"><pre class="prettyprint linenums"><code>([\s\S]*?)<\/code><\/pre><\/div><!-- endcode \1 -->/,
+        replacement: "[code]$2[/code]"
+    },
+    {
+        name: "PHP colorized tag",
+        regexp: /<!-- code (\d+) --><div class="codesnippet neo-code-language-php"><pre class="prettyprint linenums"><code class="language-php">([\s\S]*?)<\/code><\/pre><\/div><!-- endcode \1 -->/,
+        replacement: "[php]$2[/php]"
+    },
+    {
+        name: "Colorized code tag with language",
+        regexp: /<!-- code (\d+) --><div class="codesnippet neo-code-language-(\S+?)"><pre class="prettyprint linenums"><code class="language-\2">([\s\S]*?)<\/code><\/pre><\/div><!-- endcode \1 -->/,
+        replacement: "[code=$2]$3[/code]"
+    },
+    {
+        name: "Wiki embed tags",
+        regexp: /<div class="wikiembed">[\s\S]*?<a href="http:\/\/([^.]+?).neoseeker.com\/wiki\/([^"]+?)"[^>]*?>[^<]*?<\/a>[\s\S]+?<div class="wikiembed_footer"><\/div>[\s\S]*?<\/div>/,
+        replacement: "[[we.$1:$2]]"
+    },
+    {
         name: "New lines",
         regexp: /<br(?: \/)?>/gim,
         replacement: "\n"
