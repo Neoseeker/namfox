@@ -1,1 +1,13 @@
 These files will be hosted on Neoseeker's servers.
+
+# About the files
+
+The TranslationRules.pack.js file is used by NAMFox for transation
+
+# Editing the files
+
+Edit the TranslationRules.js file and then go to http://dean.edwards.name/packer/ to create the pack file.  Make sure to enable "Base62 encode" and "Shrink variables".
+
+You can test the translation by editing HtmlToMarkupTranslator.js and using the TranslationUsage.html to test the changes to translation.
+
+Unfortunately, at this time the TranslationRules are not used by the HtmlToMarkupTranslator.js file so you have to edit both places to test the code.

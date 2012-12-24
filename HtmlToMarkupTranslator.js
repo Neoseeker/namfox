@@ -95,17 +95,17 @@ var HtmlToMarkupTranslator = {
         meteormateria: ":meteormateria:",
         holymateria: ":holymateria:"
     },
-    
+
     _replaceHtmlEntities: function(html) {
         /// <summary>
         ///   Replaces the HTML entities that could be in an HTML string.
         /// </summary>
         /// <param name="html" type="String">The HTML to convert.</param>
         /// <returns type="String" />
-        
+
         return html.replace(/\&lt;/gi, "<").replace(/\&gt;/gi, ">").replace(/\&amp;/gi, "&");
     },
-    
+
     _replaceList: function(hierarchy, startingIndex, depth, markup, lastTags) {
         /// <summary>
         ///   Converts a single wikilist to the appropriate markup.
@@ -128,9 +128,9 @@ var HtmlToMarkupTranslator = {
         ///   what element exists on what depth level.
         /// </param>
         /// <returns type="String" />
-        
+
         var tag = hierarchy.substr(startingIndex, 4);
-        
+
         if (tag.indexOf("ul") !== -1) {
             markup += HtmlToMarkupTranslator.Util.repeat("*", depth);
             lastTags[depth - 1]  = "*";
@@ -143,27 +143,27 @@ var HtmlToMarkupTranslator = {
             markup += HtmlToMarkupTranslator.Util.repeat(lastTags[depth - 1], depth);
             startingIndex++;
         }
-        
+
         markup += " ";
-        
+
         // Increment by 9: "<ul><li> " or "/li><li> "
         startingIndex += 9;
-        
+
         var liNextStep = hierarchy.indexOf("</li>", startingIndex);
         if (liNextStep === -1) {
             liNextStep = 1000000;
         }
-        
+
         var ulNextStep = hierarchy.indexOf("<ul>", startingIndex);
         if (ulNextStep === -1) {
             ulNextStep = 1000000;
         }
-        
+
         var olNextStep = hierarchy.indexOf("<ol>", startingIndex);
         if (olNextStep === -1) {
             olNextStep = 1000000;
         }
-        
+
         var nextStep = -1;
         if (liNextStep < ulNextStep) {
             if (liNextStep < olNextStep) {
@@ -181,12 +181,12 @@ var HtmlToMarkupTranslator = {
                 nextStep = olNextStep;
             }
         }
-        
+
         markup += hierarchy.substr(startingIndex, nextStep - startingIndex);
         startingIndex = nextStep;
-        
+
         var nextTag = hierarchy.substr(startingIndex, 4);
-        
+
         if (nextTag.indexOf("/li") !== -1) {
             while (
                 (nextTag = hierarchy.substr(startingIndex, 4)) !== ""
@@ -228,7 +228,7 @@ var HtmlToMarkupTranslator = {
 
         return "http://www.neoseeker.com" + href;
     },
-    
+
     _replaceLists: function(html) {
         /// <summary>
         ///   Converts the new wiki-lists into their nTag equivalents.
@@ -237,29 +237,29 @@ var HtmlToMarkupTranslator = {
         ///   The HTML in which to find and replace wikilists.
         /// </param>
         /// <returns type="String" />
-        
+
         var listExpr = /(?:<span class="wikilists">)?<[ou]l>(?:<font size="\d">)*<li>(?=.*<\/?(?:[ou]l|li)).*(?:<\/span><\!-- wikilists -->)?/i;
         for (var results = html.match(listExpr); results; results = html.match(listExpr)) {
             var hierarchy = results[0].replace(/(?:<p>|\n)/g, "");
             var filteredHierarchy = hierarchy.replace(/<span class="wikilists">/g, "").replace(/<\/span><\!-- wikilists -->/g, "");
-            
+
             // In Firefox 3, sometimes the DOM model can become bloated with excess tags that actually appear
             // between the <[ou]l> and <li> or between the </li> and </[ou]l>. This replacement switches the
             // content to a form that interpretList() can account for.
             filteredHierarchy = filteredHierarchy.replace(/<([ou])l>(.*?)<li> /g, "<$1l><li> $2");
             filteredHierarchy = filteredHierarchy.replace(/<\/li>(.*?)<(li|\/[ou]l)>/g, "$1</li><$2>");
-            
+
             // Sometimes we also see legacy tags that don't insert a trailing </li> tag. This normalization will
             // work in these cases.
             filteredHierarchy = filteredHierarchy.replace(/<li>([^><]*?)(<\/[ou]l>)/g, "<li>$1</li>$2");
-            
+
             var list = this._replaceList(filteredHierarchy, 0, 1, "", []);
             html = html.replace(new RegExp(hierarchy.replace(/([\\\^\$*+[\]?{}.=!:(|)])/g, "\\$1"), "g"), list);
         }
-        
+
         return html;
     },
-    
+
     _replaceSmileys: function(html) {
         /// <summary>
         ///   Replaces smileys with their respective shortcut equivalents in text.
@@ -267,7 +267,7 @@ var HtmlToMarkupTranslator = {
         /// <param name="html" type="String">
         ///   The HTML string that should be replaced.
         /// </param>
-        
+
         var smileyExpr = /<img src="http:\/\/(?:i|www)\.neoseeker\.com\/[di]\/icons\/(.*?)\.(?:gif|png)".*?vspace.*?>/gi;
         var that = this;
         return html.replace(
@@ -278,7 +278,7 @@ var HtmlToMarkupTranslator = {
             }
         );
     },
-    
+
     _stripPhpFontTags: function(html) {
         /// <summary>
         ///   Strips the font tags that result from PHP's highlight_string() function when converting
@@ -286,7 +286,7 @@ var HtmlToMarkupTranslator = {
         /// </summary>
         /// <param name="html" type="String">The HTML to convert.</param>
         /// <returns type="String" />
-        
+
         // Needs to run through this regexp multiple times
         // (should only be two though) because there is one font tag that
         // usually stays at the beginning and encompasses
@@ -296,10 +296,10 @@ var HtmlToMarkupTranslator = {
         while (regexp.test(html)) {
             html = html.replace(regexp, '$1');
         }
-        
+
         var phpSectionRegexp = /<code>([\s\S]*?)<\/code>/gi;
         var php5Regexp = /<span style=".*?">([\s\S]*?)<\/span>/gi;
-        
+
         // Use a temporary variable to make the replacements, because
         // phpSectionRegexp's lastIndex should be preserved against the
         // original string so that multiple PHP tags can be found. This
@@ -307,17 +307,17 @@ var HtmlToMarkupTranslator = {
         var newHtml = html;
         while (results = phpSectionRegexp.exec(html)) {
             var phpSection = results[1];
-            
+
             // Translate twice to account for nested tags.
             var newPhpSection = phpSection.replace(php5Regexp, "$1");
             newPhpSection = newPhpSection.replace(php5Regexp, "$1");
-            
+
             newHtml = newHtml.replace(HtmlToMarkupTranslator.Util.toRegExp(phpSection, "gi"), newPhpSection);
         }
-        
+
         return newHtml;
     },
-    
+
     translate: function(html, callback) {
         /// <summary>
         /// Translates an HTML string directly from Neoseeker into its
@@ -326,11 +326,11 @@ var HtmlToMarkupTranslator = {
         /// <param name="html" type="String">The HTML to translate.</param>
         /// <param name="callback" type="Function">The callback function to invoke
         /// once the markup has been translated.</param>
-        
+
         // Strip any "under moderation" tags (since the person
         // who sees these will be a moderator).
         html = html.replace(/<p> \[ Check <a href=".*?\/index.php\?fn=moderation_queue\&amp;f=\d+">moderation queue<\/a> to see who reported this post \] (?:<\/p>)?\s*$/, "");
-        
+
         // Strip any edit tags from the end of the post.
         html = html.replace(/<div[^>]*?class="small right"[^>]*?>[^<]*?Edit[^<]*?<\/div><br \/><\/div>$/, "");
 
@@ -415,7 +415,8 @@ var HtmlToMarkupTranslator = {
         //  29a. <a href="*/members/____/" class="mention">_____</a> should be converted to @____ if the user name has spaces; otherwise, @___@
         //  29b. <a href='x' target='_blank'>y</a> should be converted to [link name=y]x[/link].
         //  30. <a name='x'></a> should be converted to [anchor]x[/anchor]. (Legacy)
-        //  31. <div style="float:???">...</div><!-- float:??? --> should be converted to [float=???][/float]
+        //  31. <div style="float:???">...</div><!-- float:??? --> should be converted to [float=???][/float] for legacy float tags
+        //  31b <div class="ntags-pull-???">...</div><!-- float:??? --> should be converted to [float=???][/float]
         //  32. <div align=x> should be converted to [div align=x]. </div> should be converted to [/div].
         //      X should be stripped of all <font color='xxx'></font> tags first though (but keep the content inside of them).
         //  33 - 38. Handles other embedded flash content (videos).
@@ -466,7 +467,7 @@ var HtmlToMarkupTranslator = {
                 return HtmlToMarkupTranslator.Util.repeat("!", parseInt(header)) + content;
             }
         );
-        
+
         replaceExpr = /<h(\d) class="mw_heading">([\s\S]*?)<!-- mw_heading --><\/h\1>/gi;
         postHtml = postHtml.replace(
             replaceExpr,
@@ -475,7 +476,7 @@ var HtmlToMarkupTranslator = {
                 return surround + content + surround;
             }
         );
-        
+
         // Handles case 10
         replaceExpr = /<a href="#(.*?)">([\s\S]*?)<\/a>/gi;
         postHtml = postHtml.replace(replaceExpr, "[[#$1|$2]]");
@@ -486,13 +487,13 @@ var HtmlToMarkupTranslator = {
 
         // Handles case 12
         replaceExpr = /<a href="\/members\/([^/]*?)\/" target="_blank">([^<]*?)<\/a>/gi;
-        
+
         postHtml = postHtml.replace(
             replaceExpr,
             function (all, member, alias) {
                 member = member.replace(/(?:\+|\%20)/g, " ");
                 alias = alias.replace(/\%20/g, " ");
-                
+
                 if (member === alias) {
                     return "[[member:" + alias + "]]";
                 }
@@ -525,7 +526,7 @@ var HtmlToMarkupTranslator = {
             function (all, member, alias) {
                 member = member.replace(/(?:\+|\%20)/g, " ");
                 alias = alias.replace(/\%20/g, " ");
-                
+
                 if (member === alias) {
                     return "[[pm:" + member + "]]";
                 }
@@ -590,7 +591,7 @@ var HtmlToMarkupTranslator = {
         // need to translate those colors into their respective hex code formats. All of the other color types (plain text,
         // such as "red" or "green") should be unaffected.
         replaceExpr = /<span style="color: rgb\((.*?)\);">/gi;
-        
+
         var that = this;
         postHtml = postHtml.replace(
             replaceExpr,
@@ -662,6 +663,9 @@ var HtmlToMarkupTranslator = {
         // Handles case 31
         postHtml = postHtml.replace(/<div style="float:\s?(.*?)">([\s\S]*?)<\/div><!-- float:\1 -->/g, "[float=$1]$2[/float]");
 
+        // Handles case 31b
+		postHtml = postHtml.replace(/<div class="ntags-pull-(.*?)">([\s\S]*?)<\/div><!-- float:\1 -->/g, "[float=$1]$2[/float]");
+
         // Handles case 32
         postHtml = postHtml.replace(/<div align=(.*?)>/gi, '[div align=$1]');
         postHtml = postHtml.replace(/<\/div>/gi, '[/div]');
@@ -698,13 +702,13 @@ var HtmlToMarkupTranslator = {
         postHtml = postHtml.replace(/<\/?p(?: .*)?>/gi, '');
         // Replaces the html entities
         postHtml = this._replaceHtmlEntities(postHtml);
-        
+
         postHtml = HtmlToMarkupTranslator.Util.trim(postHtml);
-        
+
         if (callback) {
             callback(postHtml);
         }
-        
+
         return postHtml;
     }
 };
@@ -715,7 +719,7 @@ HtmlToMarkupTranslator.Util = {
         /// <param name="str" type="String">The String object to convert to a RegExp.</param>
         /// <param name="flags" optional="true">(Optional) Flags to pass to the RegExp constructor.</param>
         /// <returns type="RegExp" />
-    
+
         return new RegExp(str.replace(/([\\\^\$*+[\]?{}.=!:(|)])/g,"\\$1"), flags || "");
     },
 
@@ -744,7 +748,7 @@ HtmlToMarkupTranslator.Util = {
         /// <param name="str" type="String">The String object in which to search for the substring.</param>
         /// <param name="substring" type="String">The String object to seek.</param>
         /// <returns type="Boolean" />
-    
+
         return str.indexOf(substring) === 0;
     },
 
@@ -752,7 +756,7 @@ HtmlToMarkupTranslator.Util = {
         /// <summary>Removes all occurrences of white space characters from the beginning and end of this instance.</summary>
         /// <param name="str" type="String">The String object from which to trim whitespace.</param>
         /// <returns type="String" />
-    
+
         return str.replace(/^\s+|\s+$/g, "");
     }
 };

@@ -421,10 +421,15 @@ NAMFox.translationRules = [
         replacement: "[anchor]$1[/anchor]"
     },
     {
-        name: "Float tags",
+        name: "Float tags legacy",
         regexp: /<div style="float:\s?(.*?)">([\s\S]*?)<\/div><!-- float:\1 -->/gm,
         replacement: "[float=$1]$2[/float]"
     },
+	{
+		name: "Float tags",
+		regexp: /<div class="ntags-pull-(.*?)">([\s\S]*?)<\/div><!-- float:\1 -->/gm,
+		replacement: "[float=$1]$2[/float]"
+	},
     {
         name: "Div open tags",
         regexp: /<div align=(.*?)>/gim,
