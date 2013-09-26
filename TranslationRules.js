@@ -3,7 +3,7 @@ var NAMFox = NAMFox || {};
 NAMFox.translationRules = [
     {
         name: "Edit tags",
-        regexp: /(?:<br \/><br \/>)?<div[^>]*?class="text-small text-right"[^>]*?>[^<]*?Edit[^<]*?<\/div><br \/><\/div>$/m,
+        regexp: /(?:<br \/><br \/>)?<div[^>]*?class="text-small pull-right"[^>]*?>[^<]*?Edit[^<]*?<\/div><br \/><\/div>$/m,
         replacement: ""
     },
     {
