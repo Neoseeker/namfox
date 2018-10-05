@@ -226,7 +226,7 @@ var HtmlToMarkupTranslator = {
             return href;
         }
 
-        return "http://www.neoseeker.com" + href;
+        return "https://www.neoseeker.com" + href;
     },
 
     _replaceLists: function(html) {
@@ -268,7 +268,7 @@ var HtmlToMarkupTranslator = {
         ///   The HTML string that should be replaced.
         /// </param>
 
-        var smileyExpr = /<img src="http:\/\/(?:i|www)\.neoseeker\.com\/[di]\/icons\/(.*?)\.(?:gif|png)".*?vspace.*?>/gi;
+        var smileyExpr = /<img src="https:\/\/(?:i|www)\.neoseeker\.com\/[di]\/icons\/(.*?)\.(?:gif|png)".*?vspace.*?>/gi;
         var that = this;
         return html.replace(
             smileyExpr,
@@ -341,11 +341,11 @@ var HtmlToMarkupTranslator = {
         // is *usually* closed at that point. If it is and it contains any text
         // whatsoever (not just tags), then it is preserved. Otherwise, the
         // <p> tags are tossed. There is a particular case here
-        // (http://neoseeker.com/forums/index.php?fn=view_thread&t=734010&p=29#446)
+        // (https://neoseeker.com/forums/index.php?fn=view_thread&t=734010&p=29#446)
         // that exemplifies the second case. There the format is
         // <p><font size="1"></font></p>, so that needs to be tossed.
         //
-        // Conversely, here (http://neoseeker.com/forums/index.php?fn=view_thread&t=734010&p=29#450),
+        // Conversely, here (https://neoseeker.com/forums/index.php?fn=view_thread&t=734010&p=29#450),
         // a post begins with text and then a quote, so we must preserve that <p>.
         // The following two regex expressions are very similar. The only
         // difference is that the first has a plus instead of a star mid-way
@@ -369,7 +369,7 @@ var HtmlToMarkupTranslator = {
         postHtml = postHtml.replace(/<a href="mailto:(.*?)" target="_blank">\1<\/a>/g, "$1");
 
         // Odd pattern occurs in posts like this: (See second instance of "GTA Fansites" in HTML)
-        // http://www.neoseeker.com/forums/32198/t892328-grand-theft-auto-iv-information-thread/
+        // https://www.neoseeker.com/forums/32198/t892328-grand-theft-auto-iv-information-thread/
         postHtml = postHtml.replace(/<\/span>(<font.*?>)?(<br>)+\n\n/g, '</span>$1$2');
 
         // Initial analysis on how HTML will convert to markup:
@@ -402,14 +402,14 @@ var HtmlToMarkupTranslator = {
         //  20. <li> should be converted to [li].
         //  21. <ul> should be converted to [ul]. Also, </ul> should be converted to [/ul].
         //  22. <ol> should be converted to [ol]. Also, </ol> should be converted to [/ol].
-        //  23. Replace <object height="350" width="425"><embed src="http://www.youtube.com/v/????" type="application/x-shockwave-flash" wmode="transparent"
+        //  23. Replace <object height="350" width="425"><embed src="https://www.youtube.com/v/????" type="application/x-shockwave-flash" wmode="transparent"
         //      height="350" width="425"></object> with [youtube]????[/youtube]
         //  24. <span style='color: xxx;'> should be converted to [color=xxx]. Also, </span> in this case should match [/color].
         //     UNDONE: The style attribute here may include more markup text when combined with other tags, so be on the look out for this case.
         //  25. <font size='x'> should be converted to [size='x']. Also, </font> should match [/size].
         //  26. <a href='x' target='_blank'><img src='y' border='1'></a> should be converted to [img link=x]y[/img].
         //      If x contains color (#24) or other formatting tags (#6 - #7), then parse those to their respective markup.
-        //  27. <a href="http://dev.neoseeker.com/images_server/v_vfaq_image.php?id=___" style=""><img src="___"></a> should be converted to
+        //  27. <a href="https://dev.neoseeker.com/images_server/v_vfaq_image.php?id=___" style=""><img src="___"></a> should be converted to
         //      [faqimg=$1]$2[/faqimg]
         //  28. <img src='x'> should be converted to [img]x[/img].
         //  29a. <a href="*/members/____/" class="mention">_____</a> should be converted to @____ if the user name has spaces; otherwise, @___@
@@ -584,7 +584,7 @@ var HtmlToMarkupTranslator = {
         postHtml = postHtml.replace(replaceExpr, "[youtube]$1[/youtube]");
 
         // Handles case 23c - Legacy youtube translation
-        replaceExpr = /<object.*?>.*?value="http:\/\/www.youtube.com\/v\/(.*?)">.*?<\/object>/g;
+        replaceExpr = /<object.*?>.*?value="https:\/\/www.youtube.com\/v\/(.*?)">.*?<\/object>/g;
         postHtml = postHtml.replace(replaceExpr, "[youtube]$1[/youtube]");
 
         // Handles case 24. JavaScript seems to translate hex codes into the format of style="color: rgb(x, y, z)" so we
@@ -620,7 +620,7 @@ var HtmlToMarkupTranslator = {
         postHtml = this._replaceSmileys(postHtml);
 
         // Handles case 27
-        postHtml = postHtml.replace(/<a href="http:\/\/i.neoseeker.com\/v_vfaq_image\.php\?id=(\d+)" class="faqimage"><img src="(.*?)" \/><\/a>/gi, '[faqimg=$1]$2[/faqimg]');
+        postHtml = postHtml.replace(/<a href="https:\/\/i.neoseeker.com\/v_vfaq_image\.php\?id=(\d+)" class="faqimage"><img src="(.*?)" \/><\/a>/gi, '[faqimg=$1]$2[/faqimg]');
 
         // Handles case 28
         postHtml = postHtml.replace(/<img.*?src="(.*?)".*?>/gi, '[img]$1[/img]');
@@ -671,22 +671,22 @@ var HtmlToMarkupTranslator = {
         postHtml = postHtml.replace(/<\/div>/gi, '[/div]');
 
         // Handles case 33 - [gametrailers]
-        postHtml = postHtml.replace(/<object.*?id="gtembed".*?>[\s\S]*?http:\/\/www.gametrailers.com\/remote_wrap.php\?mid=(\d+)[\s\S]*?<\/object>/g, '[gametrailers]$1[/gametrailers]');
+        postHtml = postHtml.replace(/<object.*?id="gtembed".*?>[\s\S]*?https:\/\/www.gametrailers.com\/remote_wrap.php\?mid=(\d+)[\s\S]*?<\/object>/g, '[gametrailers]$1[/gametrailers]');
 
         // Handles case 34 - [gametrailers_uservideo]
-        postHtml = postHtml.replace(/<object.*?id="gtembed".*?>[\s\S]*?http:\/\/www.gametrailers.com\/remote_wrap.php\?umid=(\d+)[\s\S]*?<\/object>/g, '[gametrailers_uservideo]$1[/gametrailers_uservideo]');
+        postHtml = postHtml.replace(/<object.*?id="gtembed".*?>[\s\S]*?https:\/\/www.gametrailers.com\/remote_wrap.php\?umid=(\d+)[\s\S]*?<\/object>/g, '[gametrailers_uservideo]$1[/gametrailers_uservideo]');
 
         // Handles case 35 - [gamevideos]
-        postHtml = postHtml.replace(/<object.*?id="gamevideos6".*?>[\s\S]*?http:\/\/www.gamevideos.com\:80\/swf\/gamevideos11.swf\?embedded=1&fullscreen=1&autoplay=0&src=http:\/\/www.gamevideos.com:80\/video\/videoListXML%3Fid%3D(\d+)%26ordinal%3D1176581224863%26adPlay%3Dfalse[\s\S]*?<\/object>/g, '[gamevideos]$1[/gamevideos]');
+        postHtml = postHtml.replace(/<object.*?id="gamevideos6".*?>[\s\S]*?https:\/\/www.gamevideos.com\:80\/swf\/gamevideos11.swf\?embedded=1&fullscreen=1&autoplay=0&src=https:\/\/www.gamevideos.com:80\/video\/videoListXML%3Fid%3D(\d+)%26ordinal%3D1176581224863%26adPlay%3Dfalse[\s\S]*?<\/object>/g, '[gamevideos]$1[/gamevideos]');
 
         // Handles case 36 - [ignvideo]
         postHtml = postHtml.replace(/<embed[^>]*?flashvars='([^']*?ign.com[^']*?)&allownetworking.*?'><\/embed>/g, '[ignvideo]$1[/ignvideo]');
 
         // Handles case 37a - [neovid]
-        postHtml = postHtml.replace(/<object.*?width="470".*?>\r?\n?<param name="movie" value="http:\/\/videos.neoseeker.com\/v\/(.*?)" \/>[\s\S]*?<\/object>/gi, "[neovid]$1[/neovid]");
+        postHtml = postHtml.replace(/<object.*?width="470".*?>\r?\n?<param name="movie" value="https:\/\/videos.neoseeker.com\/v\/(.*?)" \/>[\s\S]*?<\/object>/gi, "[neovid]$1[/neovid]");
 
         // Handles case 37b - [neovid size=]
-        postHtml = postHtml.replace(/<object.*?width="(\d+)".*?>\r?\n?<param name="movie" value="http:\/\/videos.neoseeker.com\/v\/(.*?)" \/>[\s\S]*?<\/object>/gi, "[neovid size=$1]$2[/neovid]");
+        postHtml = postHtml.replace(/<object.*?width="(\d+)".*?>\r?\n?<param name="movie" value="https:\/\/videos.neoseeker.com\/v\/(.*?)" \/>[\s\S]*?<\/object>/gi, "[neovid size=$1]$2[/neovid]");
 
         // Handles case 38 - [gamespot]
         postHtml = postHtml.replace(/<embed id="mymovie".*?flashvars=".*?paramsURI=[^"]*?id%3D(\d+)[^"]*?".*?>/g, "[gamespot]$1[/gamespot]");

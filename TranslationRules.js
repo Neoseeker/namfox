@@ -82,7 +82,7 @@ NAMFox.translationRules = [
     },
     {
         name: "Wiki embed tags",
-        regexp: /<div class="wikiembed">[\s\S]*?<a href="http:\/\/([^.]+?).neoseeker.com\/wiki\/([^"]+?)"[^>]*?>[^<]*?<\/a>[\s\S]+?<div class="wikiembed_footer"><\/div>[\s\S]*?<\/div>/,
+        regexp: /<div class="wikiembed">[\s\S]*?<a href="https:\/\/([^.]+?).neoseeker.com\/wiki\/([^"]+?)"[^>]*?>[^<]*?<\/a>[\s\S]+?<div class="wikiembed_footer"><\/div>[\s\S]*?<\/div>/,
         replacement: "[[we.$1:$2]]"
     },
     {
@@ -248,7 +248,7 @@ NAMFox.translationRules = [
     },
     {
         name: "Embedded youtube videos",
-        regexp: /<object.*?>.*?value="http:\/\/www.youtube.com\/v\/(.*?)">.*?<\/object>/gm,
+        regexp: /<object.*?>.*?value="https:\/\/www.youtube.com\/v\/(.*?)">.*?<\/object>/gm,
         replacement: "[youtube]$1[/youtube]"
     },
     {
@@ -274,7 +274,7 @@ NAMFox.translationRules = [
     {
         name: "Internal link cleansing",
         regexp: /<a href="([^h].*?)">(.*?)<\/a>/gm,
-        replacement: '<a href="http://www.neoseeker.com$1">$2</a>'
+        replacement: '<a href="https://www.neoseeker.com$1">$2</a>'
     },
     {
         name: "Image links",
@@ -285,7 +285,7 @@ NAMFox.translationRules = [
         name: "Smileys",
         callFunction: "_replaceSmileys",
         argument: {
-            regexp: /<img src="http:\/\/staticneo.com\/neoassets\/smileys\/([^.]*?)\.(?:gif|png)"[^>]*?vspace[^>]*?>/gim,
+            regexp: /<img src="https:\/\/staticneo.com\/neoassets\/smileys\/([^.]*?)\.(?:gif|png)"[^>]*?vspace[^>]*?>/gim,
             smileyMap: {
                 animangry: ':angry:',
                 thicksmile: ':thick:',
@@ -379,7 +379,7 @@ NAMFox.translationRules = [
     },
     {
         name: "faqimg tag",
-        regexp: /<a href="http:\/\/img.neoseeker.com\/v_vfaq_image\.php\?id=(\d+)" class="faqimage"><img src="(.*?)" \/><\/a>/gim,
+        regexp: /<a href="https:\/\/img.neoseeker.com\/v_vfaq_image\.php\?id=(\d+)" class="faqimage"><img src="(.*?)" \/><\/a>/gim,
         replacement: "[faqimg=$1]$2[/faqimg]"
     },
     {
@@ -390,14 +390,14 @@ NAMFox.translationRules = [
         name: "@ mentions for single-word names",
         // The real HTML doesn't have the host name in the URL,
         // but the earlier "Internal link cleansing rule" changes that.
-        regexp: /<a href="http:\/\/www.neoseeker.com\/members\/[^\/]*?\/" class="mention">(\S*?)<\/a>/gm,
+        regexp: /<a href="https:\/\/www.neoseeker.com\/members\/[^\/]*?\/" class="mention">(\S*?)<\/a>/gm,
         replacement: "@$1"
     },
     {
         name: "@ mentions for multiple-word names",
         // The real HTML doesn't have the host name in the URL,
         // but the earlier "Internal link cleansing rule" changes that.
-        regexp: /<a href="http:\/\/www.neoseeker.com\/members\/[^\/]*?\/" class="mention">([\s\S]*?)<\/a>/gm,
+        regexp: /<a href="https:\/\/www.neoseeker.com\/members\/[^\/]*?\/" class="mention">([\s\S]*?)<\/a>/gm,
         replacement: "@$1@"
     },
     {
@@ -442,17 +442,17 @@ NAMFox.translationRules = [
     },
     {
         name: "Gametrailers video tag",
-        regexp: /<object.*?id="gtembed".*?>[\s\S]*?http:\/\/www.gametrailers.com\/remote_wrap.php\?mid=(\d+)[\s\S]*?<\/object>/gm,
+        regexp: /<object.*?id="gtembed".*?>[\s\S]*?https:\/\/www.gametrailers.com\/remote_wrap.php\?mid=(\d+)[\s\S]*?<\/object>/gm,
         replacement: "[gametrailers]$1[/gametrailers]"
     },
     {
         name: "Gametrailers user video tag",
-        regexp: /<object.*?id="gtembed".*?>[\s\S]*?http:\/\/www.gametrailers.com\/remote_wrap.php\?umid=(\d+)[\s\S]*?<\/object>/gm,
+        regexp: /<object.*?id="gtembed".*?>[\s\S]*?https:\/\/www.gametrailers.com\/remote_wrap.php\?umid=(\d+)[\s\S]*?<\/object>/gm,
         replacement: "[gametrailers_uservideo]$1[/gametrailers_uservideo]"
     },
     {
         name: "Gamevideos tag",
-        regexp: /<object.*?id="gamevideos6".*?>[\s\S]*?http:\/\/www.gamevideos.com\:80\/swf\/gamevideos11.swf\?embedded=1&fullscreen=1&autoplay=0&src=http:\/\/www.gamevideos.com:80\/video\/videoListXML%3Fid%3D(\d+)%26ordinal%3D1176581224863%26adPlay%3Dfalse[\s\S]*?<\/object>/gm,
+        regexp: /<object.*?id="gamevideos6".*?>[\s\S]*?https:\/\/www.gamevideos.com\:80\/swf\/gamevideos11.swf\?embedded=1&fullscreen=1&autoplay=0&src=http:\/\/www.gamevideos.com:80\/video\/videoListXML%3Fid%3D(\d+)%26ordinal%3D1176581224863%26adPlay%3Dfalse[\s\S]*?<\/object>/gm,
         replacement: "[gamevideos]$1[/gamevideos]"
     },
     {
@@ -462,12 +462,12 @@ NAMFox.translationRules = [
     },
     {
         name: "Neo videos",
-        regexp: /<object.*?width="470".*?>\r?\n?<param name="movie" value="http:\/\/videos.neoseeker.com\/v\/(.*?)" \/>[\s\S]*?<\/object>/gim,
+        regexp: /<object.*?width="470".*?>\r?\n?<param name="movie" value="https:\/\/videos.neoseeker.com\/v\/(.*?)" \/>[\s\S]*?<\/object>/gim,
         replacement: "[neovid]$1[/neovid]"
     },
     {
         name: "Neo videos with custom size",
-        regexp: /<object.*?width="(\d+)".*?>\r?\n?<param name="movie" value="http:\/\/videos.neoseeker.com\/v\/(.*?)" \/>[\s\S]*?<\/object>/gim,
+        regexp: /<object.*?width="(\d+)".*?>\r?\n?<param name="movie" value="https:\/\/videos.neoseeker.com\/v\/(.*?)" \/>[\s\S]*?<\/object>/gim,
         replacement: "[neovid size=$1]$2[/neovid]"
     },
     {
